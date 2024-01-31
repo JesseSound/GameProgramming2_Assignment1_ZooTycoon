@@ -14,6 +14,12 @@ public enum Hungry
     HUNGRY,
     FULL
 }
+
+public enum Biomes
+{
+    ROCK,
+    PEN
+}
 public class Animal
 {
     public string name;
@@ -21,6 +27,7 @@ public class Animal
     public int hunger;
     public States movementType;
     public Hungry hungerState;
+    public Biomes home;
 
 }
 
