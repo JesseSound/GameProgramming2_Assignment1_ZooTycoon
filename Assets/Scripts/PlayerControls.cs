@@ -22,7 +22,16 @@ public class PlayerControls : MonoBehaviour
     void FixedUpdate()
     {
 
-        Vector2 movement_vector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * speed * Time.smoothDeltaTime;
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        // Ensure movement is either horizontal or vertical, not diagonal
+        if (horizontalInput != 0f)
+        {
+            verticalInput = 0f;
+        }
+
+        Vector2 movement_vector = new Vector2(horizontalInput, verticalInput) * speed * Time.smoothDeltaTime;
 
         if (movement_vector != Vector2.zero)
         {
