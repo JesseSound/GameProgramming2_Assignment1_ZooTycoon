@@ -5,49 +5,37 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 {
 
-    public float moveSpeed = 5.0f;
-    private Rigidbody2D rb;
+    public float speed = 5.0f;
+    Rigidbody2D rbody;
+    Animator anim;
 
-    //public float speed = 0.02f;
-
-    //public float speedY = 0.01f;
-
-    //public float directionX = 1.0f;
-
-    //public float directionY = 1.0f;
-    private void Start()
+    // Use this for initialization
+    void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0.0f;
-    }
-    void Update()
 
-    {
-        float moveX = 0f;
-        float moveY = 0f;
+        rbody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
 
-        // Check for input
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            moveY = 1f;
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            moveY = -1f;
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            moveX = -1f;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            moveX = 1f;
-        }
-
-        Vector2 movement = new Vector2(moveX, moveY);
-        rb.velocity = movement.normalized * moveSpeed;
 
     }
 
+    void FixedUpdate()
+    {
+
+        Vector2 movement_vector = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * speed * Time.smoothDeltaTime;
+
+        if (movement_vector != Vector2.zero)
+        {
+            anim.SetBool("isWalking", true);
+            anim.SetFloat("input_x", movement_vector.x);
+            anim.SetFloat("input_y", movement_vector.y);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+            anim.SetFloat("input_x", 0.0f);
+            anim.SetFloat("input_y", 0.0f);
+        }
+        rbody.MovePosition(rbody.position + movement_vector);
+    }
 }
