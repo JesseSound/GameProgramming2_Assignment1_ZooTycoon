@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerControls : MonoBehaviour
@@ -8,18 +6,18 @@ public class PlayerControls : MonoBehaviour
     Rigidbody2D rb;
     Vector2 velocity;
     Animator animator;
-    SpriteRenderer spriteRenderer;
 
     public Sprite upSprite;
     public Sprite downSprite;
     public Sprite leftSprite;
     public Sprite rightSprite;
+    private float lastMovementX;
+    private float lastMovementY;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -45,29 +43,41 @@ public class PlayerControls : MonoBehaviour
         animator.SetFloat("Vertical", velocity.y);
         animator.SetFloat("speed", velocity.sqrMagnitude);
 
-        // Update sprite based on the last movement direction
-        UpdateSpriteDirection();
+        // Check if player movement is zero and the last movement was positive in the X direction
+        if (horizontalInput == 0 && lastMovementX > 0)
+        {
+            SetSprite(rightSprite);
+        }
+
+        // Check if player movement is zero and the last movement was positive in the Y direction
+        if (verticalInput == 0 && lastMovementY > 0)
+        {
+            SetSprite(upSprite);
+        }
+
+        // Update last movement values for the next frame
+        lastMovementX = horizontalInput;
+        lastMovementY = verticalInput;
+    }
+
+    private void SetSprite(Sprite newSprite)
+    {
+        // Assuming you have a SpriteRenderer component attached to your GameObject
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = newSprite;
+        }
+        else
+        {
+            Debug.LogWarning("SpriteRenderer component not found on the GameObject.");
+        }
     }
 
     private void FixedUpdate()
     {
         // Move the player rigidbody
         rb.MovePosition(rb.position + velocity * moveSpeed * Time.fixedDeltaTime);
-    }
-
-    void UpdateSpriteDirection()
-    {
-        if (velocity.x != 0f || velocity.y != 0f)
-        {
-            // Set the sprite based on the last non-zero movement direction
-            if (velocity.x < 0f)
-                spriteRenderer.sprite = leftSprite;
-            else if (velocity.x > 0f)
-                spriteRenderer.sprite = rightSprite;
-            else if (velocity.y < 0f)
-                spriteRenderer.sprite = downSprite;
-            else if (velocity.y > 0f)
-                spriteRenderer.sprite = upSprite;
-        }
     }
 }
