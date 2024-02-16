@@ -24,6 +24,7 @@ public enum Biomes
 }
 public abstract class Animal
 {
+    public float roamingSpeed;
     public string name;
     public int age;
     public int hunger;
@@ -31,8 +32,9 @@ public abstract class Animal
     public Hungry hungerState;
     public Biomes home;
 
-    public void animate() { }
-    public void speak() { }
+    public abstract void animate(GameObject animal);
+    public abstract void movement();
+    public abstract void speak();
 }
 
 public class Bulbasaur : Animal
@@ -41,6 +43,7 @@ public class Bulbasaur : Animal
 
     public Bulbasaur(GameObject bulbasaurPrefab, Vector3 spawnPosition)
     {
+        roamingSpeed = 5f;
         name = "Bulbasaur";
         age = Random.Range(1, 20);
         hunger = 100;
@@ -48,12 +51,40 @@ public class Bulbasaur : Animal
         Debug.Log(age);
         // Instantiate the Bulbasaur GameObject at the specified spawn position
         bulbasaurGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
-
+        movementType = States.IDLE;
        
     }
 
+    public override void animate(GameObject animal)
+    {
+        Animator anim = animal.GetComponent<Animator>();
 
+        switch (movementType)
+        {
+            case States.IDLE:
+                anim.SetTrigger("Idle"); 
+                break;
 
+            case States.ROAMING:
+                anim.SetTrigger("Roaming"); 
+                break;
+
+                
+        }
+    }
+    public override void speak()
+    {
+        Debug.Log("bulba!");
+    }
+    public override void movement()
+    {
+        
+    }
+    //we going to randomly switch states here. and also , because we can we will also control movement
+    private IEnumerator StateSwitch()
+    {
+
+    }
 }
 
 
