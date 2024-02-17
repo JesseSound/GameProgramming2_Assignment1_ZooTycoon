@@ -25,9 +25,9 @@ public enum Biomes
 }
 public abstract class Animal
 {
-    
-    public Transform chatBubble;
 
+    public Transform chatBubble;
+    public Transform hungerIcon;
     public TextMeshPro voiceBox;
     public GameObject animalGameObject;
     public int direction;
@@ -38,15 +38,16 @@ public abstract class Animal
     public string type;
     public HungerState hungerState;
     public Biomes home;
-    
-    
+
+
     public MonoBehaviour monoBehaviourReference;
-    
-    
+
+
     public abstract void speak();
     public abstract void eat();
-   
-  
+    public abstract void isHungry();
+
+
 }
 
 public class Bulbasaur : Animal
@@ -70,7 +71,7 @@ public class Bulbasaur : Animal
         name = "Bulbasaur";
         type = "Grass";
         level = Random.Range(1, 20);
-        hunger = 10;
+        hunger = 100;
         home = Biomes.PEN;
         // Instantiate the Bulbasaur GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
@@ -87,10 +88,11 @@ public class Bulbasaur : Animal
             rb.gravityScale = 0f;
         }
 
-        
+        hungerIcon = animalGameObject.transform.Find("hunger");
 
-
+        hungerIcon.gameObject.SetActive(false);
         Transform chatBubble = animalGameObject.transform.Find("chatBubble");
+
         voiceBox = chatBubble.GetComponent<TextMeshPro>();
         
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
@@ -111,9 +113,12 @@ public class Bulbasaur : Animal
         
     }
 
+    public override void isHungry()
+    {
+        hungerIcon.gameObject.SetActive(true);
+    }
 
 
-    
 }
 
 
@@ -161,7 +166,9 @@ public class Charmander: Animal
         voiceBox = chatBubble.GetComponent<TextMeshPro>();
        
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
+        hungerIcon = animalGameObject.transform.Find("hunger");
 
+        hungerIcon.gameObject.SetActive(false);
     }
 
 
@@ -174,7 +181,11 @@ public class Charmander: Animal
     {
         
     }
-   
+    public override void isHungry()
+    {
+        hungerIcon.gameObject.SetActive(true);
+    }
+
 
 }
 
@@ -211,7 +222,9 @@ public class Pikachu : Animal
         
         //send off some info to Animations script
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
+        hungerIcon = animalGameObject.transform.Find("hunger");
 
+        hungerIcon.gameObject.SetActive(false);
     }
 
 
@@ -227,7 +240,11 @@ public class Pikachu : Animal
     }
 
 
-   
+    public override void isHungry()
+    {
+        hungerIcon.gameObject.SetActive(true);
+    }
+
 
 }
 
@@ -263,7 +280,9 @@ public class Squirtle: Animal
         
         //send off some info to Animations script
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
+        hungerIcon = animalGameObject.transform.Find("hunger");
 
+        hungerIcon.gameObject.SetActive(false);
     }
 
 
@@ -281,7 +300,11 @@ public class Squirtle: Animal
     }
 
 
-    
+    public override void isHungry()
+    {
+        hungerIcon.gameObject.SetActive(true);
+    }
+
 
 }
 
@@ -392,24 +415,27 @@ public class AnimalManager : MonoBehaviour
             foreach (Bulbasaur animal in bulbasaurInstances)
             {
                 
-                animal.hunger -= Random.Range(2,5);
+                animal.hunger -= Random.Range(3,7);
                 //Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if(animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
+                    animal.isHungry();
+
                     
+
                 } 
 
              }
             foreach (Charmander animal in charmanderInstances)
             {
 
-                animal.hunger -= Random.Range(2, 5);
+                animal.hunger -= Random.Range(5, 6);
                 //Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    
+                    animal.isHungry();
                 }
 
             }
@@ -417,12 +443,12 @@ public class AnimalManager : MonoBehaviour
             foreach (Squirtle animal in squirtleInstances)
             {
 
-                animal.hunger -= Random.Range(2, 5);
+                animal.hunger -= Random.Range(6, 9);
                // Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    
+                    animal.isHungry();
                 }
 
             }
@@ -430,12 +456,12 @@ public class AnimalManager : MonoBehaviour
             foreach (Pikachu animal in pikachuInstances)
             {
 
-                animal.hunger -= Random.Range(2, 5);
+                animal.hunger -= Random.Range(5, 8);
                // Debug.Log(animal.level + " " + animal.hunger +" "+ animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    
+                    animal.isHungry();
                 }
 
             }
