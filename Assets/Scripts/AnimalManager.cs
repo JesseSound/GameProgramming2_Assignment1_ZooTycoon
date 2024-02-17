@@ -109,8 +109,9 @@ public class Bulbasaur : Animal
 
     public override void eat()
     {
-       
-        
+        hunger = 100;
+        hungerState = HungerState.FULL;
+        hungerIcon.gameObject.SetActive(false);
     }
 
     public override void isHungry()
@@ -179,7 +180,9 @@ public class Charmander: Animal
 
     public override void eat()
     {
-        
+        hunger = 100;
+        hungerState = HungerState.FULL;
+        hungerIcon.gameObject.SetActive(false);
     }
     public override void isHungry()
     {
@@ -236,7 +239,9 @@ public class Pikachu : Animal
 
     public override void eat()
     {
-       
+        hunger = 100;
+        hungerState = HungerState.FULL;
+        hungerIcon.gameObject.SetActive(false);
     }
 
 
@@ -294,9 +299,10 @@ public class Squirtle: Animal
 
     public override void eat()
     {
-      
-        hungerState = HungerState.FULL;
+
         hunger = 100;
+        hungerState = HungerState.FULL;
+        hungerIcon.gameObject.SetActive(false);
     }
 
 
