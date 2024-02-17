@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEditor.U2D.Aseprite;
@@ -24,18 +26,23 @@ public enum Biomes
 public abstract class Animal
 {
 
-    
+    public Transform chatBubble;
+
+    public TextMeshPro voiceBox;
     public GameObject animalGameObject;
     public int direction;
     public Rigidbody2D rb;
     public string name;
-    public int age;
+    public int level;
     public int hunger;
     public string type;
     public Hungry hungerState;
     public Biomes home;
+    
+    
     public MonoBehaviour monoBehaviourReference;
-  
+    
+    
     public abstract void speak();
     public abstract void eat();
 }
@@ -59,7 +66,7 @@ public class Bulbasaur : Animal
 
         name = "Bulbasaur";
         type = "Grass";
-        age = Random.Range(1, 20);
+        level = Random.Range(1, 20);
         hunger = 100;
         home = Biomes.PEN;
         // Instantiate the Bulbasaur GameObject at the specified spawn position
@@ -72,7 +79,9 @@ public class Bulbasaur : Animal
             rb.gravityScale = 0f;
         }
 
-      
+        Transform chatBubble = animalGameObject.transform.Find("chatBubble");
+        voiceBox = chatBubble.GetComponent<TextMeshPro>();
+        
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
     }
@@ -80,7 +89,8 @@ public class Bulbasaur : Animal
     
     public override void speak()
     {
-        Debug.Log("bulba!");
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
+
     }
 
     public override void eat()
@@ -121,7 +131,7 @@ public class Charmander: Animal
 
         name = "Charmander";
         type = "Fire";
-        age = Random.Range(1, 20);
+        level = Random.Range(1, 20);
         hunger = 100;
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
@@ -133,8 +143,9 @@ public class Charmander: Animal
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 0f;
         }
-
-
+        Transform chatBubble = animalGameObject.transform.Find("chatBubble");
+        voiceBox = chatBubble.GetComponent<TextMeshPro>();
+       
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
     }
@@ -142,7 +153,7 @@ public class Charmander: Animal
 
     public override void speak()
     {
-        Debug.Log("bulba!");
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
     public override void eat()
@@ -169,7 +180,7 @@ public class Pikachu : Animal
 
         name = "Pikachu";
         type = "Electric";
-        age = Random.Range(1, 20);
+        level = Random.Range(1, 20);
         hunger = 100;
         home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
@@ -182,7 +193,9 @@ public class Pikachu : Animal
             rb.gravityScale = 0f;
         }
 
-
+        Transform chatBubble = animalGameObject.transform.Find("chatBubble");
+        voiceBox = chatBubble.GetComponent<TextMeshPro>();
+        
         //send off some info to Animations script
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
@@ -191,7 +204,7 @@ public class Pikachu : Animal
 
     public override void speak()
     {
-        Debug.Log("bulba!");
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
     public override void eat()
@@ -217,7 +230,7 @@ public class Squirtle: Animal
 
         name = "Squirtle";
         type = "Water";
-        age = Random.Range(1, 20);
+        level = Random.Range(1, 20);
         hunger = 100;
         home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
@@ -229,8 +242,10 @@ public class Squirtle: Animal
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 0f;
         }
-
-
+        //init our voicey box
+        Transform chatBubble = animalGameObject.transform.Find("chatBubble");
+        voiceBox = chatBubble.GetComponent<TextMeshPro>();
+        
         //send off some info to Animations script
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
@@ -239,7 +254,8 @@ public class Squirtle: Animal
 
     public override void speak()
     {
-        Debug.Log("bulba!");
+
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
     public override void eat()
@@ -302,37 +318,76 @@ public class AnimalManager : MonoBehaviour
         {
             Bulbasaur bulbasaurInstance = new Bulbasaur(bulbasaurPrefab, penSpawn.transform.position, this);
             bulbasaurInstances.Add(bulbasaurInstance);  // Add the instance to the list
-          
+            bulbasaurInstance.speak();
         }
 
         foreach (GameObject rockSpawn in rockSpawns)
         {
             Charmander charmanderInstance = new Charmander(charmanderPrefab, rockSpawn.transform.position, this);
             charmanderInstances.Add(charmanderInstance);
+            charmanderInstance.speak();
         }
 
         foreach (GameObject forestSpawn in forestSpawns)
         {
             Pikachu pikachuInstance = new Pikachu(pikachuPrefab, forestSpawn.transform.position, this);
             pikachuInstances.Add(pikachuInstance);
+            pikachuInstance.speak();
         }
 
         foreach (GameObject waterSpawn in waterSpawns)
         {
             Squirtle squirtleInstance = new Squirtle(squirtlePrefab, waterSpawn.transform.position, this);
             squirtleInstances.Add(squirtleInstance);
+            squirtleInstance.speak();
         }
 
     }
 
-    void Update()
+    
+
+    public static IEnumerator RandomChitter(string name, TextMeshPro voice)
     {
-        foreach (Bulbasaur bulb in bulbasaurInstances)
+       
+       
+        // Keep the coroutine running indefinitely
+        while (true)
         {
-           //probably the speak stuff
+
+            switch (name)
+            {
+
+                case "Bulbasaur":
+                    yield return new WaitForSeconds(Random.Range(1f, 3f));
+                    voice.text = "Bulba!";
+                    yield return new WaitForSeconds(Random.Range(1f, 2f));
+                    voice.text = "!";
+                    break;
+
+                case "Charmander":
+                    yield return new WaitForSeconds(Random.Range(1f, 2f));
+                    voice.text = "Char! Char! :(";
+                    yield return new WaitForSeconds(Random.Range(1f, 3f));
+                    voice.text = "";
+                    break;
+
+                case "Squirtle":
+                    yield return new WaitForSeconds(Random.Range(1f, 2f));
+                    voice.text = "Squirt!";
+                    yield return new WaitForSeconds(Random.Range(1f, 3f));
+                    voice.text = "";
+                    break;
+
+                case "Pikachu":
+                    yield return new WaitForSeconds(Random.Range(1f, 2f));
+                    voice.text = "Pika!";
+                    yield return new WaitForSeconds(Random.Range(1f, 3f));
+                    voice.text = "";
+                    break;
+
+            }
         }
     }
-
 
 
 }
