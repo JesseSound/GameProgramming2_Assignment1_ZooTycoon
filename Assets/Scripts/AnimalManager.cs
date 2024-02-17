@@ -217,6 +217,7 @@ public class Pikachu : Animal
 
     public override void speak()
     {
+        
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
@@ -396,7 +397,7 @@ public class AnimalManager : MonoBehaviour
                 if(animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    animal.eat();
+                    
                 } 
 
              }
@@ -408,7 +409,7 @@ public class AnimalManager : MonoBehaviour
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    animal.eat();
+                    
                 }
 
             }
@@ -421,7 +422,7 @@ public class AnimalManager : MonoBehaviour
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    animal.eat();
+                    
                 }
 
             }
@@ -434,7 +435,7 @@ public class AnimalManager : MonoBehaviour
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
-                    animal.eat();
+                    
                 }
 
             }
