@@ -205,6 +205,52 @@ public class Pikachu : Animal
 }
 
 
+public class Squirtle: Animal
+{
+
+
+    public Squirtle(GameObject squirtlePrefab, Vector3 spawnPosition, MonoBehaviour monoBehaviourReference)
+    {
+
+        //we need a coroutine baby :(
+        this.monoBehaviourReference = monoBehaviourReference;
+
+        name = "Squirtle";
+        type = "Water";
+        age = Random.Range(1, 20);
+        hunger = 100;
+        home = Biomes.FOREST;
+        // Instantiate the GameObject at the specified spawn position
+        animalGameObject = Object.Instantiate(squirtlePrefab, spawnPosition, Quaternion.identity);
+        rb = animalGameObject.GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = animalGameObject.AddComponent<Rigidbody2D>();
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.gravityScale = 0f;
+        }
+
+
+        //send off some info to Animations script
+        monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
+
+    }
+
+
+    public override void speak()
+    {
+        Debug.Log("bulba!");
+    }
+
+    public override void eat()
+    {
+        // we will have the animals eat eachother LOL
+    }
+
+
+
+
+}
 
 
 
@@ -221,8 +267,7 @@ public class Pikachu : Animal
 
 
 
-
-    public class AnimalManager : MonoBehaviour
+public class AnimalManager : MonoBehaviour
 {
 
     //store a list of penspawns, choose bulbasaur i guess 
@@ -241,6 +286,15 @@ public class Pikachu : Animal
     public List<Pikachu> pikachuInstances = new List<Pikachu>();
     public List<GameObject> forestSpawns = new List<GameObject>(4);
     public GameObject pikachuPrefab;
+
+    //store list of water spawns for my BOY SQUIRTLEEEE
+
+    public List<Squirtle> squirtleInstances = new List<Squirtle>();
+    public List<GameObject> waterSpawns = new List<GameObject>(4);
+    public GameObject squirtlePrefab;
+
+
+
     void Start()
     {
         // Loop through the pens and spawn a Bulbasaur
@@ -261,6 +315,12 @@ public class Pikachu : Animal
         {
             Pikachu pikachuInstance = new Pikachu(pikachuPrefab, forestSpawn.transform.position, this);
             pikachuInstances.Add(pikachuInstance);
+        }
+
+        foreach (GameObject waterSpawn in waterSpawns)
+        {
+            Squirtle squirtleInstance = new Squirtle(squirtlePrefab, waterSpawn.transform.position, this);
+            squirtleInstances.Add(squirtleInstance);
         }
 
     }
