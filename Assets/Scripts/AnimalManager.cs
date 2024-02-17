@@ -10,7 +10,7 @@ using UnityEngine;
 
 
 
-public enum Hungry
+public enum HungerState
 {
     HUNGRY,
     FULL
@@ -36,7 +36,7 @@ public abstract class Animal
     public int level;
     public int hunger;
     public string type;
-    public Hungry hungerState;
+    public HungerState hungerState;
     public Biomes home;
     
     
@@ -309,10 +309,25 @@ public class AnimalManager : MonoBehaviour
     public List<GameObject> waterSpawns = new List<GameObject>(4);
     public GameObject squirtlePrefab;
 
+    //store an array of every animal in the scene as a gameObject for funsies
+    private GameObject[] animalObjects;
+
+    //hunger reduction Logic
+    public float interval = 5f; // Set the interval in seconds
+    public float elapsedTime;
+
+
+
 
 
     void Start()
     {
+        //timer logic
+        elapsedTime = 0f;
+        
+
+
+
         // Loop through the pens and spawn a Bulbasaur
         foreach (GameObject penSpawn in penSpawns)
         {
@@ -342,9 +357,79 @@ public class AnimalManager : MonoBehaviour
             squirtleInstance.speak();
         }
 
+
+        animalObjects = GameObject.FindGameObjectsWithTag("animals");
+
     }
 
-    
+
+    public void Update()
+    {
+        elapsedTime += Time.deltaTime;
+       
+        if (elapsedTime >= interval)
+        {
+            Debug.Log("reduce!");
+            foreach (Bulbasaur animal in bulbasaurInstances)
+            {
+                
+                animal.hunger -= Random.Range(2,5);
+                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+                if(animal.hunger <= 0)
+                {
+                    animal.hungerState = HungerState.HUNGRY;
+                } 
+
+             }
+            foreach (Charmander animal in charmanderInstances)
+            {
+
+                animal.hunger -= Random.Range(2, 5);
+                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+                if (animal.hunger <= 0)
+                {
+                    animal.hungerState = HungerState.HUNGRY;
+                }
+
+            }
+
+            foreach (Squirtle animal in squirtleInstances)
+            {
+
+                animal.hunger -= Random.Range(2, 5);
+                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+                if (animal.hunger <= 0)
+                {
+                    animal.hungerState = HungerState.HUNGRY;
+                }
+
+            }
+
+            foreach (Pikachu animal in pikachuInstances)
+            {
+
+                animal.hunger -= Random.Range(2, 5);
+                Debug.Log(animal.level + " " + animal.hunger +" "+ animal.name);
+                if (animal.hunger <= 0)
+                {
+                    animal.hungerState = HungerState.HUNGRY;
+                }
+
+            }
+
+            elapsedTime = 0f;
+            interval = Random.Range(5, 8);
+        }
+
+
+
+
+
+
+        
+    }
+
+
 
     public static IEnumerator RandomChitter(string name, TextMeshPro voice)
     {
@@ -389,5 +474,5 @@ public class AnimalManager : MonoBehaviour
         }
     }
 
-
+  
 }

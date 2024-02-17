@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5027811482438864229}
   m_Layer: 0
   m_Name: Squirtle
-  m_TagString: Untagged
+  m_TagString: animals
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
