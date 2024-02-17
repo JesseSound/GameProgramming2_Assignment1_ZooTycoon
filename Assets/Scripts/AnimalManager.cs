@@ -361,7 +361,7 @@ public class AnimalManager : MonoBehaviour
                     yield return new WaitForSeconds(Random.Range(1f, 3f));
                     voice.text = "Bulba!";
                     yield return new WaitForSeconds(Random.Range(1f, 2f));
-                    voice.text = "!";
+                    voice.text = "";
                     break;
 
                 case "Charmander":
