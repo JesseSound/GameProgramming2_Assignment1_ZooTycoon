@@ -9,7 +9,10 @@ public class Animations : MonoBehaviour
     public static IEnumerator NPCMovement(GameObject animateMe, Rigidbody2D rb, int direction)
     {
         Animator animDirection = animateMe.GetComponent<Animator>();
-       
+       if (animDirection == null)
+        {
+            Destroy(animateMe);
+        }
         // Keep the coroutine running indefinitely
         while (true)
         {

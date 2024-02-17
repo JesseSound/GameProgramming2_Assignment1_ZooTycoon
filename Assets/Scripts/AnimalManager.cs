@@ -25,7 +25,7 @@ public enum Biomes
 }
 public abstract class Animal
 {
-
+    
     public Transform chatBubble;
 
     public TextMeshPro voiceBox;
@@ -45,6 +45,8 @@ public abstract class Animal
     
     public abstract void speak();
     public abstract void eat();
+   
+  
 }
 
 public class Bulbasaur : Animal
@@ -53,7 +55,8 @@ public class Bulbasaur : Animal
 
     public Bulbasaur(GameObject bulbasaurPrefab, Vector3 spawnPosition, MonoBehaviour monoBehaviourReference)
     {
-
+        
+       
         //we need a coroutine baby :(
         this.monoBehaviourReference = monoBehaviourReference;
         
@@ -67,10 +70,15 @@ public class Bulbasaur : Animal
         name = "Bulbasaur";
         type = "Grass";
         level = Random.Range(1, 20);
-        hunger = 100;
+        hunger = 10;
         home = Biomes.PEN;
         // Instantiate the Bulbasaur GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
+
+        animalGameObject.AddComponent<FoodFInder>();
+
+
+
         rb = animalGameObject.GetComponent<Rigidbody2D>(); 
         if (rb == null)
         {
@@ -78,6 +86,9 @@ public class Bulbasaur : Animal
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             rb.gravityScale = 0f;
         }
+
+        
+
 
         Transform chatBubble = animalGameObject.transform.Find("chatBubble");
         voiceBox = chatBubble.GetComponent<TextMeshPro>();
@@ -91,16 +102,18 @@ public class Bulbasaur : Animal
     {
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
 
+
     }
 
     public override void eat()
     {
-        // we will have the animals eat eachother LOL
+       
+        
     }
 
 
+
     
-   
 }
 
 
@@ -136,6 +149,7 @@ public class Charmander: Animal
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(charmanderPrefab, spawnPosition, Quaternion.identity);
+        animalGameObject.AddComponent<FoodFInder>();
         rb = animalGameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -158,12 +172,10 @@ public class Charmander: Animal
 
     public override void eat()
     {
-        // we will have the animals eat eachother LOL
+        
     }
-
-
-
    
+
 }
 
 
@@ -186,6 +198,7 @@ public class Pikachu : Animal
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(pikachuPrefab, spawnPosition, Quaternion.identity);
         rb = animalGameObject.GetComponent<Rigidbody2D>();
+        animalGameObject.AddComponent<FoodFInder>();
         if (rb == null)
         {
             rb = animalGameObject.AddComponent<Rigidbody2D>();
@@ -209,12 +222,12 @@ public class Pikachu : Animal
 
     public override void eat()
     {
-        // we will have the animals eat eachother LOL
+       
     }
 
 
-
    
+
 }
 
 
@@ -235,6 +248,7 @@ public class Squirtle: Animal
         home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(squirtlePrefab, spawnPosition, Quaternion.identity);
+        animalGameObject.AddComponent<FoodFInder>();
         rb = animalGameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -260,11 +274,13 @@ public class Squirtle: Animal
 
     public override void eat()
     {
-        // we will have the animals eat eachother LOL
+      
+        hungerState = HungerState.FULL;
+        hunger = 100;
     }
 
 
-
+    
 
 }
 
@@ -309,19 +325,21 @@ public class AnimalManager : MonoBehaviour
     public List<GameObject> waterSpawns = new List<GameObject>(4);
     public GameObject squirtlePrefab;
 
-    //store an array of every animal in the scene as a gameObject for funsies
-    private GameObject[] animalObjects;
+    
 
     //hunger reduction Logic
     public float interval = 5f; // Set the interval in seconds
     public float elapsedTime;
 
 
-
-
+  
 
     void Start()
     {
+
+
+
+
         //timer logic
         elapsedTime = 0f;
         
@@ -358,7 +376,7 @@ public class AnimalManager : MonoBehaviour
         }
 
 
-        animalObjects = GameObject.FindGameObjectsWithTag("animals");
+        
 
     }
 
@@ -374,10 +392,11 @@ public class AnimalManager : MonoBehaviour
             {
                 
                 animal.hunger -= Random.Range(2,5);
-                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+                //Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if(animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
+                    animal.eat();
                 } 
 
              }
@@ -385,10 +404,11 @@ public class AnimalManager : MonoBehaviour
             {
 
                 animal.hunger -= Random.Range(2, 5);
-                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+                //Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
+                    animal.eat();
                 }
 
             }
@@ -397,10 +417,11 @@ public class AnimalManager : MonoBehaviour
             {
 
                 animal.hunger -= Random.Range(2, 5);
-                Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
+               // Debug.Log(animal.level + " " + animal.hunger + " " + animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
+                    animal.eat();
                 }
 
             }
@@ -409,10 +430,11 @@ public class AnimalManager : MonoBehaviour
             {
 
                 animal.hunger -= Random.Range(2, 5);
-                Debug.Log(animal.level + " " + animal.hunger +" "+ animal.name);
+               // Debug.Log(animal.level + " " + animal.hunger +" "+ animal.name);
                 if (animal.hunger <= 0)
                 {
                     animal.hungerState = HungerState.HUNGRY;
+                    animal.eat();
                 }
 
             }
@@ -474,5 +496,6 @@ public class AnimalManager : MonoBehaviour
         }
     }
 
-  
+   
+
 }
