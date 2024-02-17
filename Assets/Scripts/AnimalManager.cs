@@ -24,7 +24,7 @@ public enum Biomes
 public abstract class Animal
 {
 
-
+    
     public GameObject animalGameObject;
     public int direction;
     public Rigidbody2D rb;
@@ -49,7 +49,7 @@ public class Bulbasaur : Animal
 
         //we need a coroutine baby :(
         this.monoBehaviourReference = monoBehaviourReference;
-
+        
 
 
         
@@ -64,7 +64,7 @@ public class Bulbasaur : Animal
         home = Biomes.PEN;
         // Instantiate the Bulbasaur GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
-        rb = animalGameObject.GetComponent<Rigidbody2D>();
+        rb = animalGameObject.GetComponent<Rigidbody2D>(); 
         if (rb == null)
         {
             rb = animalGameObject.AddComponent<Rigidbody2D>();
@@ -73,7 +73,7 @@ public class Bulbasaur : Animal
         }
 
       
-        monoBehaviourReference.StartCoroutine(NPCMovement(animalGameObject));
+        monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
     }
 
@@ -89,63 +89,8 @@ public class Bulbasaur : Animal
     }
 
 
-    //we going to randomly switch states here. and also  we will also control movement
-    public IEnumerator NPCMovement(GameObject animateMe)
-    {
-        Animator animDirection = animateMe.GetComponent<Animator>();
-        // Keep the coroutine running indefinitely
-        while (true)
-        {
-            direction = Random.Range(0, 5);  // Adjusted to include case 4
-            animDirection.ResetTrigger("Idle");
-            switch (direction)
-            {
-                case 0:
-                   
-                    animDirection.SetTrigger("Roam1");
-                    rb.velocity = Vector2.left;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 1:
-                    
-                    animDirection.SetTrigger("Roam2");
-                    rb.velocity = Vector2.right;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 2:
-                    
-                    animDirection.SetTrigger("Roam3");
-                    rb.velocity = Vector2.up;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 3:
-                    
-                    animDirection.SetTrigger("Roam4");
-                    rb.velocity = Vector2.down;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 4:
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle"); // Trigger the "Idle" animation
-                    break;
-            }
-           yield return new WaitForSeconds(Random.Range(1f, 3f));
-            animDirection.ResetTrigger("Roam1");
-            animDirection.ResetTrigger("Roam2");
-            animDirection.ResetTrigger("Roam3");
-            animDirection.ResetTrigger("Roam4");
-            animDirection.ResetTrigger("Idle");
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-        }
-    }
+    
+   
 }
 
 
@@ -190,7 +135,7 @@ public class Charmander: Animal
         }
 
 
-        monoBehaviourReference.StartCoroutine(NPCMovement(animalGameObject));
+        monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
     }
 
@@ -207,62 +152,7 @@ public class Charmander: Animal
 
 
 
-    public IEnumerator NPCMovement(GameObject animateMe)
-    {
-        Animator animDirection = animateMe.GetComponent<Animator>();
-        // Keep the coroutine running indefinitely
-        while (true)
-        {
-            direction = Random.Range(0, 5);  // Adjusted to include case 4
-            animDirection.ResetTrigger("Idle");
-            switch (direction)
-            {
-                case 0:
-
-                    animDirection.SetTrigger("Roam1");
-                    rb.velocity = Vector2.left;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 1:
-
-                    animDirection.SetTrigger("Roam2");
-                    rb.velocity = Vector2.right;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 2:
-
-                    animDirection.SetTrigger("Roam3");
-                    rb.velocity = Vector2.up;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 3:
-
-                    animDirection.SetTrigger("Roam4");
-                    rb.velocity = Vector2.down;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 4:
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle"); // Trigger the "Idle" animation
-                    break;
-            }
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-            animDirection.ResetTrigger("Roam1");
-            animDirection.ResetTrigger("Roam2");
-            animDirection.ResetTrigger("Roam3");
-            animDirection.ResetTrigger("Roam4");
-            animDirection.ResetTrigger("Idle");
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-        }
-    }
+   
 }
 
 
@@ -277,18 +167,11 @@ public class Pikachu : Animal
         //we need a coroutine baby :(
         this.monoBehaviourReference = monoBehaviourReference;
 
-
-
-
-
-
-
-
         name = "Pikachu";
-        type = "Fire";
+        type = "Electric";
         age = Random.Range(1, 20);
         hunger = 100;
-        home = Biomes.ROCK;
+        home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(pikachuPrefab, spawnPosition, Quaternion.identity);
         rb = animalGameObject.GetComponent<Rigidbody2D>();
@@ -300,7 +183,8 @@ public class Pikachu : Animal
         }
 
 
-        monoBehaviourReference.StartCoroutine(NPCMovement(animalGameObject));
+        //send off some info to Animations script
+        monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
 
     }
 
@@ -317,62 +201,7 @@ public class Pikachu : Animal
 
 
 
-    public IEnumerator NPCMovement(GameObject animateMe)
-    {
-        Animator animDirection = animateMe.GetComponent<Animator>();
-        // Keep the coroutine running indefinitely
-        while (true)
-        {
-            direction = Random.Range(0, 5);  // Adjusted to include case 4
-            animDirection.ResetTrigger("Idle");
-            switch (direction)
-            {
-                case 0:
-
-                    animDirection.SetTrigger("Roam1");
-                    rb.velocity = Vector2.left;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 1:
-
-                    animDirection.SetTrigger("Roam2");
-                    rb.velocity = Vector2.right;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 2:
-
-                    animDirection.SetTrigger("Roam3");
-                    rb.velocity = Vector2.up;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 3:
-
-                    animDirection.SetTrigger("Roam4");
-                    rb.velocity = Vector2.down;
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle");
-                    break;
-                case 4:
-                    rb.velocity = Vector2.zero;
-                    animDirection.SetTrigger("Idle"); // Trigger the "Idle" animation
-                    break;
-            }
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-            animDirection.ResetTrigger("Roam1");
-            animDirection.ResetTrigger("Roam2");
-            animDirection.ResetTrigger("Roam3");
-            animDirection.ResetTrigger("Roam4");
-            animDirection.ResetTrigger("Idle");
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-        }
-    }
+   
 }
 
 
@@ -407,9 +236,11 @@ public class Pikachu : Animal
     public List<GameObject> rockSpawns = new List<GameObject>(4);
     public GameObject charmanderPrefab;
 
+    //store a list of forest spawns for pikachu
 
-
-
+    public List<Pikachu> pikachuInstances = new List<Pikachu>();
+    public List<GameObject> forestSpawns = new List<GameObject>(4);
+    public GameObject pikachuPrefab;
     void Start()
     {
         // Loop through the pens and spawn a Bulbasaur
@@ -426,7 +257,11 @@ public class Pikachu : Animal
             charmanderInstances.Add(charmanderInstance);
         }
 
-
+        foreach (GameObject forestSpawn in forestSpawns)
+        {
+            Pikachu pikachuInstance = new Pikachu(pikachuPrefab, forestSpawn.transform.position, this);
+            pikachuInstances.Add(pikachuInstance);
+        }
 
     }
 
