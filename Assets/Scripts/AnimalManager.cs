@@ -47,7 +47,7 @@ public abstract class Animal : IInteractable, IEat
     public HungerState hungerState;
     public Biomes home;
 
-
+    public bool isColliding = false;
     public MonoBehaviour monoBehaviourReference;
 
 
@@ -64,8 +64,15 @@ public abstract class Animal : IInteractable, IEat
 
     public void Interact()
     {
-        Debug.Log("KK");
+        //just eat shizz for right now. Surely we can figure something out later.
+
+        Eat();
+
+
     }
+
+   
+
 
 }
 
@@ -107,7 +114,7 @@ public class Bulbasaur : Animal
         voiceBox = chatBubble.GetComponent<TextMeshPro>();
         
         monoBehaviourReference.StartCoroutine(Animations.NPCMovement(animalGameObject, rb, direction));
-
+        Debug.Log(name + " " + level + " " + hunger + " " + home);
     }
 
     
@@ -159,7 +166,7 @@ public class Charmander: Animal
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(charmanderPrefab, spawnPosition, Quaternion.identity);
-        animalGameObject.AddComponent<FoodFInder>();
+       
         rb = animalGameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -174,6 +181,8 @@ public class Charmander: Animal
         hungerIcon = animalGameObject.transform.Find("hunger");
 
         hungerIcon.gameObject.SetActive(false);
+
+        Debug.Log(name + " " + level + " " + hunger + " " + home);
     }
 
 
@@ -214,7 +223,7 @@ public class Pikachu : Animal
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(pikachuPrefab, spawnPosition, Quaternion.identity);
         rb = animalGameObject.GetComponent<Rigidbody2D>();
-        animalGameObject.AddComponent<FoodFInder>();
+        
         if (rb == null)
         {
             rb = animalGameObject.AddComponent<Rigidbody2D>();
@@ -230,6 +239,12 @@ public class Pikachu : Animal
         hungerIcon = animalGameObject.transform.Find("hunger");
 
         hungerIcon.gameObject.SetActive(false);
+
+
+
+        Debug.Log(name + " " + level + " " + hunger + " " + home);
+
+
     }
 
 
@@ -239,7 +254,7 @@ public class Pikachu : Animal
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
-
+    
 
 
     public override void isHungry()
@@ -262,17 +277,19 @@ public class Squirtle: Animal
     public Squirtle(GameObject squirtlePrefab, Vector3 spawnPosition, MonoBehaviour monoBehaviourReference)
     {
 
+        isColliding = false;
+
         //we need a coroutine baby :(
         this.monoBehaviourReference = monoBehaviourReference;
 
         name = "Squirtle";
         type = "Water";
         level = Random.Range(1, 20);
-        hunger = Random.Range(60, 100);
-        home = Biomes.FOREST;
+        hunger = Random.Range(6, 7);
+        home = Biomes.WATER;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(squirtlePrefab, spawnPosition, Quaternion.identity);
-        animalGameObject.AddComponent<FoodFInder>();
+      
         rb = animalGameObject.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
@@ -289,6 +306,9 @@ public class Squirtle: Animal
         hungerIcon = animalGameObject.transform.Find("hunger");
 
         hungerIcon.gameObject.SetActive(false);
+
+
+        Debug.Log(name + " " + level + " " + hunger + " " + home);
     }
 
 
@@ -311,6 +331,9 @@ public class Squirtle: Animal
         base.Eat();
         Debug.Log("It worked!" + hunger);
     }
+
+   
+
 
 }
 
@@ -428,10 +451,7 @@ public class AnimalManager : MonoBehaviour
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
 
-                    if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        animal.Eat();
-                    }
+                   
 
                 } 
 
@@ -445,10 +465,7 @@ public class AnimalManager : MonoBehaviour
                 {
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
-                    if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        animal.Eat();
-                    }
+                   
                 }
 
             }
@@ -462,10 +479,7 @@ public class AnimalManager : MonoBehaviour
                 {
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
-                    if (Input.GetKeyDown(KeyCode.A))
-                    {
-                        animal.Eat();
-                    }
+                    
                 }
 
             }
@@ -480,9 +494,8 @@ public class AnimalManager : MonoBehaviour
                     Debug.Log("PIKA HUNGERS");
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
-                    
-                        
-                    
+                   
+ 
                 }
 
             }
@@ -490,12 +503,6 @@ public class AnimalManager : MonoBehaviour
             elapsedTime = 0f;
             interval = Random.Range(5, 8);
         }
-
-
-
-
-
-
         
     }
 
