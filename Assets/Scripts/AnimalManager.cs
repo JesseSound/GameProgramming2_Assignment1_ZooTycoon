@@ -14,7 +14,7 @@ public interface IPositionGetting
 
 public interface IInteractable
 {
-    public void Interact();
+    public void Interact(string name);
 }
 
 public interface IEat
@@ -66,11 +66,9 @@ public abstract class Animal : IInteractable, IEat
  
     public abstract void isHungry();
 
-    public void Interact()
+    public void Interact(string name)
     {
-        //just eat shizz for right now. Surely we can figure something out later.
-
-        Eat();
+        //not sure yet!
 
 
     }
