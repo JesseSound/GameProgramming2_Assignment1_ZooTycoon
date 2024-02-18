@@ -75,7 +75,7 @@ public class StatueInteraction : MonoBehaviour, IInteractable
     IEnumerator ResetMessage()
     {
         // Wait for a short time before resetting the messageText and deactivating the canvas.
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(4f); 
 
         // Resetting messageText and deactivating the canvas.
         messageText.text = "";
