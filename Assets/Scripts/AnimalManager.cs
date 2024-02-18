@@ -7,6 +7,10 @@ using UnityEditor.ShaderKeywordFilter;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
+public interface IPositionGetting
+{
+    Vector3 GetPosition();
+}
 
 public interface IInteractable
 {
@@ -33,7 +37,7 @@ public enum Biomes
 }
 public abstract class Animal : IInteractable, IEat
 {
-
+    public Vector3 spawnPos;
     public Transform chatBubble;
     public Transform hungerIcon;
     public TextMeshPro voiceBox;
@@ -71,12 +75,15 @@ public abstract class Animal : IInteractable, IEat
 
     }
 
-   
 
+    public Vector3 GetPosition()
+    {
+        return animalGameObject.transform.position;
+    }
 
 }
 
-public class Bulbasaur : Animal
+public class Bulbasaur : Animal, IPositionGetting
 {
     
 
@@ -97,7 +104,7 @@ public class Bulbasaur : Animal
         animalGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
 
 
-
+        spawnPos = spawnPosition;
         rb = animalGameObject.GetComponent<Rigidbody2D>(); 
         if (rb == null)
         {
@@ -137,6 +144,13 @@ public class Bulbasaur : Animal
     {
         base.Eat(); 
     }
+
+
+    public new Vector3 GetPosition()
+    {
+        return animalGameObject.transform.position;
+    }
+
 }
 
 
@@ -148,7 +162,7 @@ public class Bulbasaur : Animal
 
 
 
-public class Charmander: Animal
+public class Charmander: Animal, IPositionGetting
 {
     
 
@@ -162,7 +176,7 @@ public class Charmander: Animal
         name = "Charmander";
         type = "Fire";
         level = Random.Range(1, 20);
-        hunger = Random.Range(60, 100);
+        hunger = Random.Range(6, 10);
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(charmanderPrefab, spawnPosition, Quaternion.identity);
@@ -200,7 +214,10 @@ public class Charmander: Animal
     {
         base.Eat();
     }
-
+    public new Vector3 GetPosition()
+    {
+        return animalGameObject.transform.position;
+    }
 }
 
 
@@ -266,11 +283,14 @@ public class Pikachu : Animal
         base.Eat();
         Debug.Log("It worked!" + hunger);
     }
-
+    public new Vector3 GetPosition()
+    {
+        return animalGameObject.transform.position;
+    }
 }
 
 
-public class Squirtle: Animal
+public class Squirtle: Animal, IPositionGetting
 {
 
 
@@ -332,7 +352,10 @@ public class Squirtle: Animal
         Debug.Log("It worked!" + hunger);
     }
 
-   
+    public new Vector3 GetPosition()
+    {
+        return animalGameObject.transform.position;
+    }
 
 
 }
@@ -385,7 +408,16 @@ public class AnimalManager : MonoBehaviour
     public float elapsedTime;
 
 
-  
+    public List<Animal> GetAllAnimals()
+    {
+        List<Animal> allAnimals = new List<Animal>();
+        allAnimals.AddRange(bulbasaurInstances.Cast<Animal>());
+        allAnimals.AddRange(charmanderInstances.Cast<Animal>());
+        allAnimals.AddRange(pikachuInstances.Cast<Animal>());
+        allAnimals.AddRange(squirtleInstances.Cast<Animal>());
+
+        return allAnimals;
+    }
 
     void Start()
     {

@@ -10,8 +10,8 @@ public class AnimalFeeding : MonoBehaviour
 
     public bool canInteract;
     public AnimalManager animalLists;
-
-
+    public AnimalsTriggers isCollided;
+    public Vector3 newPos;
     void Start()
     {
         canInteract = false;
@@ -22,14 +22,27 @@ public class AnimalFeeding : MonoBehaviour
     {
         if (canInteract && Input.GetKeyDown(KeyCode.Space))
         {
-            foreach (Squirtle animal in animalLists.squirtleInstances )
+            Animal closestAnimal = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (var animal in animalLists.GetAllAnimals())
             {
-                if (animal.hungerState == HungerState.HUNGRY && animal.isColliding )
+                if (animal.hungerState == HungerState.HUNGRY)
                 {
-                    animal.Eat();
+                    float distance = Vector2.Distance(transform.position, animal.GetPosition());
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestAnimal = animal;
+                    }
                 }
             }
 
+            if (closestAnimal != null)
+            {
+                closestAnimal.Eat();
+            }
         }
     }
 
@@ -39,7 +52,8 @@ public class AnimalFeeding : MonoBehaviour
         if (collision.CompareTag("animals"))
         {
             canInteract = true;
-            
+            isCollided = collision.GetComponent<AnimalsTriggers>();
+            newPos = collision.GetComponent<Transform>().position;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

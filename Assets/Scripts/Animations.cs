@@ -28,6 +28,8 @@ public class Animations : MonoBehaviour
                     yield return new WaitForSeconds(Random.Range(1f, 3f));
                     rb.velocity = Vector2.zero;
                     animDirection.SetTrigger("Idle");
+                    
+                   
                     break;
                 case 1:
 
