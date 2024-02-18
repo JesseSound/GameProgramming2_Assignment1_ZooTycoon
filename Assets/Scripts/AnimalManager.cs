@@ -8,7 +8,15 @@ using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 
+public interface IInteractable
+{
+    public void Interact();
+}
 
+public interface IEat
+{
+    public void Eat();
+}
 
 public enum HungerState
 {
@@ -23,7 +31,7 @@ public enum Biomes
     WATER,
     FOREST
 }
-public abstract class Animal
+public abstract class Animal : IInteractable, IEat
 {
 
     public Transform chatBubble;
@@ -44,9 +52,20 @@ public abstract class Animal
 
 
     public abstract void speak();
-    public abstract void eat();
+    public virtual void Eat()
+    {
+        Debug.Log("BAse called");
+        hunger = 100;
+        hungerState = HungerState.FULL;
+        hungerIcon.gameObject.SetActive(false);
+    }
+ 
     public abstract void isHungry();
 
+    public void Interact()
+    {
+        Debug.Log("KK");
+    }
 
 }
 
@@ -60,23 +79,15 @@ public class Bulbasaur : Animal
        
         //we need a coroutine baby :(
         this.monoBehaviourReference = monoBehaviourReference;
-        
-
-
-        
-
-
-
+       
 
         name = "Bulbasaur";
         type = "Grass";
         level = Random.Range(1, 20);
-        hunger = 100;
+        hunger = Random.Range(60,100);
         home = Biomes.PEN;
         // Instantiate the Bulbasaur GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(bulbasaurPrefab, spawnPosition, Quaternion.identity);
-
-        animalGameObject.AddComponent<FoodFInder>();
 
 
 
@@ -107,19 +118,18 @@ public class Bulbasaur : Animal
 
     }
 
-    public override void eat()
-    {
-        hunger = 100;
-        hungerState = HungerState.FULL;
-        hungerIcon.gameObject.SetActive(false);
-    }
+   
 
     public override void isHungry()
     {
         hungerIcon.gameObject.SetActive(true);
+        
     }
 
-
+    public override void Eat()
+    {
+        base.Eat(); 
+    }
 }
 
 
@@ -142,16 +152,10 @@ public class Charmander: Animal
         this.monoBehaviourReference = monoBehaviourReference;
 
 
-
-
-
-
-
-
         name = "Charmander";
         type = "Fire";
         level = Random.Range(1, 20);
-        hunger = 100;
+        hunger = Random.Range(60, 100);
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(charmanderPrefab, spawnPosition, Quaternion.identity);
@@ -178,17 +182,15 @@ public class Charmander: Animal
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
-    public override void eat()
-    {
-        hunger = 100;
-        hungerState = HungerState.FULL;
-        hungerIcon.gameObject.SetActive(false);
-    }
+ 
     public override void isHungry()
     {
         hungerIcon.gameObject.SetActive(true);
     }
-
+    public override void Eat()
+    {
+        base.Eat();
+    }
 
 }
 
@@ -207,7 +209,7 @@ public class Pikachu : Animal
         name = "Pikachu";
         type = "Electric";
         level = Random.Range(1, 20);
-        hunger = 100;
+        hunger = Random.Range(60, 100);
         home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(pikachuPrefab, spawnPosition, Quaternion.identity);
@@ -237,19 +239,18 @@ public class Pikachu : Animal
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
-    public override void eat()
-    {
-        hunger = 100;
-        hungerState = HungerState.FULL;
-        hungerIcon.gameObject.SetActive(false);
-    }
+
 
 
     public override void isHungry()
     {
         hungerIcon.gameObject.SetActive(true);
     }
-
+    public override void Eat()
+    {
+        base.Eat();
+        Debug.Log("It worked!" + hunger);
+    }
 
 }
 
@@ -267,7 +268,7 @@ public class Squirtle: Animal
         name = "Squirtle";
         type = "Water";
         level = Random.Range(1, 20);
-        hunger = 100;
+        hunger = Random.Range(60, 100);
         home = Biomes.FOREST;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(squirtlePrefab, spawnPosition, Quaternion.identity);
@@ -297,20 +298,19 @@ public class Squirtle: Animal
         monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
     }
 
-    public override void eat()
-    {
 
-        hunger = 100;
-        hungerState = HungerState.FULL;
-        hungerIcon.gameObject.SetActive(false);
-    }
 
 
     public override void isHungry()
     {
         hungerIcon.gameObject.SetActive(true);
     }
-
+    public override void Eat()
+    {
+        Debug.Log("Sub called");
+        base.Eat();
+        Debug.Log("It worked!" + hunger);
+    }
 
 }
 
@@ -428,7 +428,10 @@ public class AnimalManager : MonoBehaviour
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
 
-                    
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        animal.Eat();
+                    }
 
                 } 
 
@@ -442,6 +445,10 @@ public class AnimalManager : MonoBehaviour
                 {
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        animal.Eat();
+                    }
                 }
 
             }
@@ -455,6 +462,10 @@ public class AnimalManager : MonoBehaviour
                 {
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
+                    if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        animal.Eat();
+                    }
                 }
 
             }
@@ -466,8 +477,12 @@ public class AnimalManager : MonoBehaviour
                // Debug.Log(animal.level + " " + animal.hunger +" "+ animal.name);
                 if (animal.hunger <= 0)
                 {
+                    Debug.Log("PIKA HUNGERS");
                     animal.hungerState = HungerState.HUNGRY;
                     animal.isHungry();
+                    
+                        
+                    
                 }
 
             }

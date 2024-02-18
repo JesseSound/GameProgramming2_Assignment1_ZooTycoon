@@ -9158,7 +9158,7 @@ Transform:
   m_GameObject: {fileID: 862598177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16147,6 +16147,8 @@ MonoBehaviour:
   - {fileID: 1498221478}
   - {fileID: 1363293765}
   squirtlePrefab: {fileID: 4380143904930186674, guid: ffbae49f0cffad541afa43a47704ad1e, type: 3}
+  interval: 5
+  elapsedTime: 0
 --- !u!4 &1449002439
 Transform:
   m_ObjectHideFlags: 0
@@ -96324,6 +96326,14 @@ PrefabInstance:
     - target: {fileID: 7387035862603228475, guid: 5d880714a3965894ca961b8ebb5df6d5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628853514550059943, guid: 5d880714a3965894ca961b8ebb5df6d5, type: 3}
+      propertyPath: m_Size.y
+      value: 1.4206388
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628853514550059943, guid: 5d880714a3965894ca961b8ebb5df6d5, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.0540694
       objectReference: {fileID: 0}
     - target: {fileID: 7628853514550059943, guid: 5d880714a3965894ca961b8ebb5df6d5, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
