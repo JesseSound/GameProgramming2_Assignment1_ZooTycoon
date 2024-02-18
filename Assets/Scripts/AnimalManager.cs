@@ -176,7 +176,7 @@ public class Charmander: Animal, IPositionGetting
         name = "Charmander";
         type = "Fire";
         level = Random.Range(1, 20);
-        hunger = Random.Range(6, 10);
+        hunger = Random.Range(60, 100);
         home = Biomes.ROCK;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(charmanderPrefab, spawnPosition, Quaternion.identity);
@@ -305,7 +305,7 @@ public class Squirtle: Animal, IPositionGetting
         name = "Squirtle";
         type = "Water";
         level = Random.Range(1, 20);
-        hunger = Random.Range(6, 7);
+        hunger = Random.Range(60, 100);
         home = Biomes.WATER;
         // Instantiate the GameObject at the specified spawn position
         animalGameObject = Object.Instantiate(squirtlePrefab, spawnPosition, Quaternion.identity);
