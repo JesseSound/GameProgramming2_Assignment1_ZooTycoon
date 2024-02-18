@@ -21,15 +21,19 @@ public class StatueInteraction : MonoBehaviour, IInteractable
         {
             case "Statue1":
                 messageText.text = infos.water;
+                StartCoroutine(ResetMessage());
                 break;
             case "Statue2":
                 messageText.text = infos.forest;
+                StartCoroutine(ResetMessage());
                 break;
             case "Statue3":
                 messageText.text = infos.rock;
+                StartCoroutine(ResetMessage());
                 break;
             case "Statue4":
                 messageText.text = infos.pen;
+                StartCoroutine(ResetMessage());
                 break;
 
         }
@@ -40,6 +44,8 @@ public class StatueInteraction : MonoBehaviour, IInteractable
     void Start()
     {
         buttonPrompt.SetActive(false);
+        messageText.text = "";
+        messageCanvas.SetActive(false);
     }
 
     // Update is called once per frame
@@ -66,5 +72,13 @@ public class StatueInteraction : MonoBehaviour, IInteractable
         interactable = false;
         buttonPrompt.SetActive(false);
     }
+    IEnumerator ResetMessage()
+    {
+        // Wait for a short time before resetting the messageText and deactivating the canvas.
+        yield return new WaitForSeconds(2f); 
 
+        // Resetting messageText and deactivating the canvas.
+        messageText.text = "";
+        messageCanvas.gameObject.SetActive(false);
+    }
 }
