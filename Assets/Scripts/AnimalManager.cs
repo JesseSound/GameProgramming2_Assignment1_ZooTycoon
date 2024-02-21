@@ -220,7 +220,7 @@ public class Charmander: Animal, IPositionGetting
 
 
 
-public class Pikachu : Animal
+public class Pikachu : Animal, IPositionGetting
 {
 
     
