@@ -559,7 +559,7 @@ public class AnimalManager : MonoBehaviour
                     voice.text = noise;
                     yield return new WaitForSeconds(Random.Range(1f, 2f));
                     voice.text = "";
-                    break;
+                   
 
 
         }
