@@ -54,6 +54,7 @@ public abstract class Animal : IInteractable, IEat
     public bool isColliding = false;
     public MonoBehaviour monoBehaviourReference;
 
+    public string Noise;
 
     public abstract void speak();
     public virtual void Eat()
@@ -79,6 +80,9 @@ public abstract class Animal : IInteractable, IEat
         return animalGameObject.transform.position;
     }
 
+
+    
+
 }
 
 public class Bulbasaur : Animal, IPositionGetting
@@ -95,6 +99,7 @@ public class Bulbasaur : Animal, IPositionGetting
 
         name = "Bulbasaur";
         type = "Grass";
+        Noise = "Bulba!";
         level = Random.Range(1, 20);
         hunger = Random.Range(60,100);
         home = Biomes.PEN;
@@ -125,7 +130,7 @@ public class Bulbasaur : Animal, IPositionGetting
     
     public override void speak()
     {
-        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(Noise, voiceBox));
 
 
     }
@@ -173,6 +178,7 @@ public class Charmander: Animal, IPositionGetting
 
         name = "Charmander";
         type = "Fire";
+        Noise = "Char!";
         level = Random.Range(1, 20);
         hunger = Random.Range(60, 100);
         home = Biomes.ROCK;
@@ -200,7 +206,7 @@ public class Charmander: Animal, IPositionGetting
 
     public override void speak()
     {
-        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(Noise, voiceBox));
     }
 
  
@@ -232,6 +238,7 @@ public class Pikachu : Animal, IPositionGetting
 
         name = "Pikachu";
         type = "Electric";
+        Noise = "Pika!";
         level = Random.Range(1, 20);
         hunger = Random.Range(60, 100);
         home = Biomes.FOREST;
@@ -266,7 +273,7 @@ public class Pikachu : Animal, IPositionGetting
     public override void speak()
     {
         
-        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(Noise, voiceBox));
     }
 
     
@@ -302,6 +309,7 @@ public class Squirtle: Animal, IPositionGetting
 
         name = "Squirtle";
         type = "Water";
+        Noise = "Squirt!";
         level = Random.Range(1, 20);
         hunger = Random.Range(60, 100);
         home = Biomes.WATER;
@@ -333,7 +341,7 @@ public class Squirtle: Animal, IPositionGetting
     public override void speak()
     {
 
-        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(name, voiceBox));
+        monoBehaviourReference.StartCoroutine(AnimalManager.RandomChitter(Noise, voiceBox));
     }
 
 
@@ -538,7 +546,7 @@ public class AnimalManager : MonoBehaviour
 
 
 
-    public static IEnumerator RandomChitter(string name, TextMeshPro voice)
+    public static IEnumerator RandomChitter(string noise, TextMeshPro voice)
     {
        
        
@@ -546,38 +554,14 @@ public class AnimalManager : MonoBehaviour
         while (true)
         {
 
-            switch (name)
-            {
-
-                case "Bulbasaur":
+            
                     yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    voice.text = "Bulba!";
+                    voice.text = noise;
                     yield return new WaitForSeconds(Random.Range(1f, 2f));
                     voice.text = "";
                     break;
 
-                case "Charmander":
-                    yield return new WaitForSeconds(Random.Range(1f, 2f));
-                    voice.text = "Char! Char! :(";
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    voice.text = "";
-                    break;
 
-                case "Squirtle":
-                    yield return new WaitForSeconds(Random.Range(1f, 2f));
-                    voice.text = "Squirt!";
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    voice.text = "";
-                    break;
-
-                case "Pikachu":
-                    yield return new WaitForSeconds(Random.Range(1f, 2f));
-                    voice.text = "Pika!";
-                    yield return new WaitForSeconds(Random.Range(1f, 3f));
-                    voice.text = "";
-                    break;
-
-            }
         }
     }
 
